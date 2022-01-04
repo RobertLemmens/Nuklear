@@ -96,9 +96,22 @@ nk_image_id(int id)
     s.w = 0; s.h = 0;
     s.region[0] = 0;
     s.region[1] = 0;
-    s.region[2] = 0;
-    s.region[3] = 0;
+    s.region[2] = 1;
+    s.region[3] = 1;
     return s;
+}
+NK_API struct nk_image
+nk_flipped_image_id(int id)
+{
+  struct nk_image s;
+  nk_zero(&s, sizeof(s));
+  s.handle.id = id;
+  s.w = 0; s.h = 0;
+  s.region[0] = 0;
+  s.region[1] = 1;
+  s.region[2] = 1;
+  s.region[3] = 0;
+  return s;
 }
 NK_API nk_bool
 nk_image_is_subimage(const struct nk_image* img)

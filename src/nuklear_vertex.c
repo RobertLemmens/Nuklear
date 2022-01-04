@@ -1123,7 +1123,7 @@ nk_draw_list_add_image(struct nk_draw_list *list, struct nk_image texture,
             nk_vec2(rect.x + rect.w, rect.y + rect.h),  uv[0], uv[1], color);
     } else nk_draw_list_push_rect_uv(list, nk_vec2(rect.x, rect.y),
             nk_vec2(rect.x + rect.w, rect.y + rect.h),
-            nk_vec2(0.0f, 0.0f), nk_vec2(1.0f, 1.0f),color);
+            nk_vec2((float)texture.region[0], (float)texture.region[1]), nk_vec2((float)texture.region[2], (float)texture.region[3]),color);
 }
 NK_API void
 nk_draw_list_add_text(struct nk_draw_list *list, const struct nk_user_font *font,
