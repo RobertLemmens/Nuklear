@@ -23618,6 +23618,7 @@ nk_image_color(struct nk_context *ctx, struct nk_image img, struct nk_color col)
 
 
 
+
 /* ===============================================================
  *
  *                          9-SLICE
