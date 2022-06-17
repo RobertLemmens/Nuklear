@@ -3729,6 +3729,7 @@ NK_API nk_handle nk_handle_id(int);
 NK_API struct nk_image nk_image_handle(nk_handle);
 NK_API struct nk_image nk_image_ptr(void*);
 NK_API struct nk_image nk_image_id(int);
+NK_API struct nk_image nk_image_with_uv_id(int id, struct nk_vec2 uv[2]);
 NK_API nk_bool nk_image_is_subimage(const struct nk_image* img);
 NK_API struct nk_image nk_subimage_ptr(void*, nk_ushort w, nk_ushort h, struct nk_rect sub_region);
 NK_API struct nk_image nk_subimage_id(int, nk_ushort w, nk_ushort h, struct nk_rect sub_region);
@@ -10509,7 +10510,7 @@ nk_draw_list_add_image(struct nk_draw_list *list, struct nk_image texture,
             nk_vec2(rect.x + rect.w, rect.y + rect.h),  uv[0], uv[1], color);
     } else nk_draw_list_push_rect_uv(list, nk_vec2(rect.x, rect.y),
             nk_vec2(rect.x + rect.w, rect.y + rect.h),
-            nk_vec2(0.0f, 0.0f), nk_vec2(1.0f, 1.0f),color);
+            nk_vec2(texture.region[0], texture.region[1]), nk_vec2(texture.region[2], texture.region[3]),color);
 }
 NK_API void
 nk_draw_list_add_text(struct nk_draw_list *list, const struct nk_user_font *font,
@@ -23534,8 +23535,8 @@ nk_image_handle(nk_handle handle)
     s.w = 0; s.h = 0;
     s.region[0] = 0;
     s.region[1] = 0;
-    s.region[2] = 0;
-    s.region[3] = 0;
+    s.region[2] = 1;
+    s.region[3] = 1;
     return s;
 }
 NK_API struct nk_image
@@ -23548,8 +23549,8 @@ nk_image_ptr(void *ptr)
     s.w = 0; s.h = 0;
     s.region[0] = 0;
     s.region[1] = 0;
-    s.region[2] = 0;
-    s.region[3] = 0;
+    s.region[2] = 1;
+    s.region[3] = 1;
     return s;
 }
 NK_API struct nk_image
@@ -23561,8 +23562,21 @@ nk_image_id(int id)
     s.w = 0; s.h = 0;
     s.region[0] = 0;
     s.region[1] = 0;
-    s.region[2] = 0;
-    s.region[3] = 0;
+    s.region[2] = 1;
+    s.region[3] = 1;
+    return s;
+}
+NK_API struct nk_image
+nk_image_with_uv_id(int id, struct nk_vec2 uv[2])
+{
+    struct nk_image s;
+    nk_zero(&s, sizeof(s));
+    s.handle.id = id;
+    s.w = 0; s.h = 0;
+    s.region[0] = uv[0].x;
+    s.region[1] = uv[0].y;
+    s.region[2] = uv[1].x;
+    s.region[3] = uv[1].y;
     return s;
 }
 NK_API nk_bool
@@ -23601,8 +23615,6 @@ nk_image_color(struct nk_context *ctx, struct nk_image img, struct nk_color col)
     if (!nk_widget(&bounds, ctx)) return;
     nk_draw_image(&win->buffer, bounds, &img, col);
 }
-
-
 
 
 

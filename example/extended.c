@@ -389,10 +389,12 @@ basic_demo(struct nk_context *ctx, struct media *media)
     ui_header(ctx, media, "Selected Image");
     ui_widget_centered(ctx, media, 100);
     nk_image(ctx, media->images[selected_image]);
+    ui_header(ctx, media, "Selected Image Flipped");
+    nk_image(ctx, media->images[selected_image]);
 
-    /*------------------------------------------------
-     *                  IMAGE POPUP
-     *------------------------------------------------*/
+  /*------------------------------------------------
+   *                  IMAGE POPUP
+   *------------------------------------------------*/
     if (image_active) {
         if (nk_popup_begin(ctx, NK_POPUP_STATIC, "Image Popup", 0, nk_rect(265, 0, 320, 220))) {
             nk_layout_row_static(ctx, 82, 82, 3);
@@ -520,6 +522,29 @@ icon_load(const char *filename)
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
     return nk_image_id((int)tex);
+}
+
+static struct nk_image
+icon_load_flipped(const char *filename)
+{
+  int x,y,n;
+  GLuint tex;
+  unsigned char *data = stbi_load(filename, &x, &y, &n, 0);
+  if (!data) die("[SDL]: failed to load image: %s", filename);
+
+  glGenTextures(1, &tex);
+  glBindTexture(GL_TEXTURE_2D, tex);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  glGenerateMipmap(GL_TEXTURE_2D);
+  stbi_image_free(data);
+  struct nk_vec2 uv[2];
+  uv[0] = nk_vec2(0,1);
+  uv[1] = nk_vec2(1,0);
+  return nk_image_with_uv_id((int)tex, uv);
 }
 
 static void
