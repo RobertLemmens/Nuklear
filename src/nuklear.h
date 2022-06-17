@@ -3508,6 +3508,7 @@ NK_API nk_handle nk_handle_id(int);
 NK_API struct nk_image nk_image_handle(nk_handle);
 NK_API struct nk_image nk_image_ptr(void*);
 NK_API struct nk_image nk_image_id(int);
+NK_API struct nk_image nk_image_with_uv_id(int id, struct nk_vec2 uv[2]);
 NK_API nk_bool nk_image_is_subimage(const struct nk_image* img);
 NK_API struct nk_image nk_subimage_ptr(void*, nk_ushort w, nk_ushort h, struct nk_rect sub_region);
 NK_API struct nk_image nk_subimage_id(int, nk_ushort w, nk_ushort h, struct nk_rect sub_region);

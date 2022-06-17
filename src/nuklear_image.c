@@ -69,8 +69,8 @@ nk_image_handle(nk_handle handle)
     s.w = 0; s.h = 0;
     s.region[0] = 0;
     s.region[1] = 0;
-    s.region[2] = 0;
-    s.region[3] = 0;
+    s.region[2] = 1;
+    s.region[3] = 1;
     return s;
 }
 NK_API struct nk_image
@@ -83,8 +83,8 @@ nk_image_ptr(void *ptr)
     s.w = 0; s.h = 0;
     s.region[0] = 0;
     s.region[1] = 0;
-    s.region[2] = 0;
-    s.region[3] = 0;
+    s.region[2] = 1;
+    s.region[3] = 1;
     return s;
 }
 NK_API struct nk_image
@@ -96,8 +96,21 @@ nk_image_id(int id)
     s.w = 0; s.h = 0;
     s.region[0] = 0;
     s.region[1] = 0;
-    s.region[2] = 0;
-    s.region[3] = 0;
+    s.region[2] = 1;
+    s.region[3] = 1;
+    return s;
+}
+NK_API struct nk_image
+nk_image_with_uv_id(int id, struct nk_vec2 uv[2])
+{
+    struct nk_image s;
+    nk_zero(&s, sizeof(s));
+    s.handle.id = id;
+    s.w = 0; s.h = 0;
+    s.region[0] = uv[0].x;
+    s.region[1] = uv[0].y;
+    s.region[2] = uv[1].x;
+    s.region[3] = uv[1].y;
     return s;
 }
 NK_API nk_bool
@@ -136,4 +149,3 @@ nk_image_color(struct nk_context *ctx, struct nk_image img, struct nk_color col)
     if (!nk_widget(&bounds, ctx)) return;
     nk_draw_image(&win->buffer, bounds, &img, col);
 }
-
