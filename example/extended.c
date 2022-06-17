@@ -72,10 +72,10 @@ static nk_ushort normal_uvs[4] = {0, 0, 1, 1};
 static nk_ushort flipped_uvs[4] = {0, 1, 1, 0};
 
 void set_image_uvs(struct nk_image *image, nk_ushort uvs[4]) {
-  image->region[0] = uvs[0];
-  image->region[1] = uvs[1];
-  image->region[2] = uvs[2];
-  image->region[3] = uvs[3];
+    image->region[0] = uvs[0];
+    image->region[1] = uvs[1];
+    image->region[2] = uvs[2];
+    image->region[3] = uvs[3];
 }
 
 /* ===============================================================
@@ -535,29 +535,6 @@ icon_load(const char *filename)
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
     return nk_image_id((int)tex);
-}
-
-static struct nk_image
-icon_load_flipped(const char *filename)
-{
-  int x,y,n;
-  GLuint tex;
-  unsigned char *data = stbi_load(filename, &x, &y, &n, 0);
-  if (!data) die("[SDL]: failed to load image: %s", filename);
-
-  glGenTextures(1, &tex);
-  glBindTexture(GL_TEXTURE_2D, tex);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, x, y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-  glGenerateMipmap(GL_TEXTURE_2D);
-  stbi_image_free(data);
-  struct nk_vec2 uv[2];
-  uv[0] = nk_vec2(0,1);
-  uv[1] = nk_vec2(1,0);
-  return nk_image_with_uv_id((int)tex, uv);
 }
 
 static void
