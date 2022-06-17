@@ -68,6 +68,16 @@ struct media {
     struct nk_image menu[6];
 };
 
+static nk_ushort normal_uvs[4] = {0, 0, 1, 1};
+static nk_ushort flipped_uvs[4] = {0, 1, 1, 0};
+
+void set_image_uvs(struct nk_image *image, nk_ushort uvs[4]) {
+  image->region[0] = uvs[0];
+  image->region[1] = uvs[1];
+  image->region[2] = uvs[2];
+  image->region[3] = uvs[3];
+}
+
 /* ===============================================================
  *
  *                          CUSTOM WIDGET
@@ -390,11 +400,14 @@ basic_demo(struct nk_context *ctx, struct media *media)
     ui_widget_centered(ctx, media, 100);
     nk_image(ctx, media->images[selected_image]);
     ui_header(ctx, media, "Selected Image Flipped");
+    ui_widget_centered(ctx, media, 100);
+    set_image_uvs(&media->images[selected_image], flipped_uvs);
     nk_image(ctx, media->images[selected_image]);
+    set_image_uvs(&media->images[selected_image], normal_uvs);
 
-  /*------------------------------------------------
-   *                  IMAGE POPUP
-   *------------------------------------------------*/
+    /*------------------------------------------------
+     *                  IMAGE POPUP
+     *------------------------------------------------*/
     if (image_active) {
         if (nk_popup_begin(ctx, NK_POPUP_STATIC, "Image Popup", 0, nk_rect(265, 0, 320, 220))) {
             nk_layout_row_static(ctx, 82, 82, 3);
